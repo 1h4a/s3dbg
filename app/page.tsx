@@ -1,7 +1,7 @@
-import Interface from "@/components/interface";
+import { ConfigInterface } from "@/components/interface";
 
 export default function Home() {
   return (
-      <Interface />
+      <ConfigInterface />
   );
 }
