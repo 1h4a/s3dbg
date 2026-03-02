@@ -35,7 +35,7 @@ export default function RootLayout({
         showSpinner={false}
         crawl={false}
       />
-      <div className="w-screen h-screen flex-col items-start justify-start p-24 tracking-tight">
+      <div className="w-screen h-full flex-col items-start justify-start p-24 tracking-tight">
           <div
               className={`flex flex-row w-full h-fit items-center justify-between font-medium tracking-tight ${geistSans.className}`}
           >
