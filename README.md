@@ -47,3 +47,9 @@ User interface paths:
 Config - `/`
 
 Logging - `/logging`
+
+### Regarding Code Quality
+
+This is not production software, and the quality of the code correlates to that. The front-end is an absolute mess with 500 fields. Documentation *.md files are largely AI generated references, but are also mostly human-verified.
+
+Actual operations are held to a "known-good" standard, which means behavior is predictable and in line with S3 behavior. The codebase is just annoying to maintain.
