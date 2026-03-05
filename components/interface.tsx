@@ -1,9 +1,13 @@
+"use client"
+
 import { Field, FieldGroup, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { clientConfig, senderConfig } from "@/components/fields";
 import type { ConfigSchema, Field as FieldSchema, Section } from "@/components/fields";
+
+import {useRef} from "react";
 
 export function ConfigInterface({ className }: { className?: string }) {
   return (
@@ -32,6 +36,7 @@ function FieldRenderer({ field }: { field: FieldSchema }) {
       <FieldLabel htmlFor={field.id}>{field.label}</FieldLabel>
       <Input
         id={field.id}
+        name={field.id}
         placeholder={field.placeholder}
         defaultValue={field.default}
         disabled={field.disabled}
@@ -63,23 +68,41 @@ function SectionRenderer({ section }: { section: Section }) {
 
 /** Renders a full config schema (title, top-level fields, sections) */
 function ConfigSection({ schema }: { schema: ConfigSchema }) {
+    const formRef = useRef<HTMLFormElement>(null);
+    const handleApply = async () => {
+        if (formRef.current) {
+            const formData = new FormData(formRef.current);
+            const data: Record<string, string> = {};
+
+            schema.fields.forEach((field) => {
+                data[field.id] = formData.get(field.id)?.toString() ?? "";
+            });
+            schema.sections?.forEach((section) => {
+                section.fields.forEach((field) => {
+                    data[field.id] = formData.get(field.id)?.toString() ?? "";
+                });
+            })
+            console.log(data);
+        }
+    }
   return (
-    <div
-      className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
-    >
-      <div className="w-full pb-4">{schema.title}</div>
-      <FieldGroup className="grid max-w-full grid-cols-4">
-        {schema.fields.map((field) => (
-          <FieldRenderer key={field.id} field={field} />
-        ))}
-      </FieldGroup>
-      {schema.sections?.map((section) => (
-        <SectionRenderer key={section.title} section={section} />
-      ))}
-        <span className="flex flex-row gap-4 pt-8 w-full items-end justify-end">
-            <Button className="active:opacity-50" variant="outline"> Apply Settings </Button>
-            <Button className="active:opacity-50" variant="outline"> Reset </Button>
+      <form
+        ref={formRef}
+        className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
+      >
+              <div className="w-full pb-4">{schema.title}</div>
+              <FieldGroup className="grid max-w-full grid-cols-4">
+                  {schema.fields.map((field) => (
+                      <FieldRenderer key={field.id} field={field} />
+                  ))}
+              </FieldGroup>
+              {schema.sections?.map((section) => (
+                  <SectionRenderer key={section.title} section={section} />
+              ))}
+              <span className="flex flex-row gap-4 pt-8 w-full items-end justify-end">
+            <Button className="active:opacity-50" type="button" variant="outline" onClick={handleApply}> Apply Settings </Button>
+            <Button className="active:opacity-50" type="button" variant="outline"> Reset </Button>
         </span>
-    </div>
+      </form>
   );
 }
