@@ -117,7 +117,7 @@ function normaliseConfigSchema(schema: ConfigSchema): ConfigSchema {
  * @param {string} value - Value to parse
  * @param {FieldType} type - Target type
  */
-function parseFieldValue(value: string, type: FieldType): string | number | boolean {
+export function parseValue(value: string, type: FieldType): string | number | boolean {
     switch (type) {
         case "string":
             return value;
