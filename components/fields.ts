@@ -117,24 +117,36 @@ function normaliseConfigSchema(schema: ConfigSchema): ConfigSchema {
  * @param {string} value - Value to parse
  * @param {FieldType} type - Target type
  */
-export function parseValue(value: string, type: FieldType): string | number | boolean {
+export function parseValue(value: string | undefined, type: FieldType): string | number | boolean | Date {
+    const dval = value ?? "";
     switch (type) {
         case "string":
-            return value;
+            return dval;
         case "number":
-            const nval = parseFloat(value);
-            if (Number.isNaN(nval)) {
+            const nval = parseFloat(dval);
+            if (dval === "") {
+                return 0
+            }
+            else if (Number.isNaN(nval)) {
                 throw new Error("Invalid value passed to input field of type number.");
             }
             else { return nval }
         case "boolean":
-            const bval = value.toLowerCase()
+            const bval = dval.toLowerCase()
             if (bval === "true" || bval === "false") {
                 return bval === "true";
+            }
+            else if (bval === "") {
+                return false;
             }
             else {
                 throw new Error("Invalid value passed to input field of type boolean.");
             }
+        case "date":
+            if (dval == "") {
+                return new Date(1)
+            }
+            return new Date(dval)
         default:
             throw new Error(`Unsupported field type: ${type}`);
     }

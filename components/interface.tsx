@@ -4,28 +4,37 @@ import { Field, FieldGroup, FieldLabel, FieldDescription } from "@/components/ui
 import { Input } from "@/components/ui/input";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { clientConfig, senderConfig } from "@/components/fields";
+import { clientConfig, senderConfig, parseValue } from "@/components/fields";
 import type { ConfigSchema, Field as FieldSchema, Section } from "@/components/fields";
 
 import {useRef} from "react";
 
 export function ConfigInterface({ className }: { className?: string }) {
   return (
-    <div
-      className={
-        "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm " +
-        className
-      }
-    >
-      <ConfigSection schema={clientConfig} />
-      <ConfigSection schema={senderConfig} />
-      <div
-        className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
-        id="logsettings"
-      >
-        <p> Logging Settings </p>
-      </div>
-    </div>
+      <>
+          <div
+              className={
+                  "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm " +
+                  className
+              }
+          >
+              <ConfigSection schema={clientConfig} />
+              <ConfigSection schema={senderConfig} />
+              <div
+                  className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
+                  id="logsettings"
+              >
+                  <p> Logging Settings </p>
+              </div>
+          </div>
+          <div
+              className={`flex flex-row w-full h-fit items-center justify-center font-medium tracking-tight`}
+          >
+              <div className="w-fit h-full outline-1 outline-amber-400 text-amber-400 opacity-75 text-sm text-center p-4 m-4 rounded-sm">
+                  Values that aren't filled are still parsed and default values are applied. The default value for strings is "", numbers is 0 and booleans is false.
+              </div>
+          </div>
+      </>
   )
 }
 
@@ -72,19 +81,20 @@ function ConfigSection({ schema }: { schema: ConfigSchema }) {
     const handleApply = async () => {
         if (formRef.current) {
             const formData = new FormData(formRef.current);
-            const data: Record<string, string> = {};
+            const data: Record<string, any> = {};
 
             schema.fields.forEach((field) => {
-                data[field.id] = formData.get(field.id)?.toString() ?? "";
+                data[field.id] = parseValue(formData.get(field.id)?.toString(), field.type) ?? "";
             });
             schema.sections?.forEach((section) => {
                 section.fields.forEach((field) => {
-                    data[field.id] = formData.get(field.id)?.toString() ?? "";
+                    data[field.id] = parseValue(formData.get(field.id)?.toString(), field.type) ?? "";
                 });
             })
             console.log(data);
         }
     }
+
   return (
       <form
         ref={formRef}
