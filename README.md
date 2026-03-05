@@ -18,7 +18,7 @@ _pnpm:_
 `pnpm i`
 `pnpm dev`
 
-While you can theoretically build and deploy the app, it's not intended to be used as such and as such, there is no support for deploying instances.
+While you can theoretically build and deploy the app, it's not intended to be used in such a manner, therefore, there is no support for deployed instances.
 
 Requests are sent via the GUI.
 
@@ -50,6 +50,6 @@ Logging - `/logging`
 
 ### Regarding Code Quality
 
-This is not production software, and the quality of the code correlates to that. The front-end is an absolute mess with 500 fields. Documentation *.md files are largely AI generated references, but are also mostly human-verified.
+This is not production software, and expectations for code quality should follow that standard. While attempts are made to keep the codebase as maintainable as possible, there isn't a large emphasis on it. Documentation *.md files are largely AI generated references, but are also mostly human-verified.
 
-Actual operations are held to a "known-good" standard, which means behavior is predictable and in line with S3 behavior. The codebase is just annoying to maintain.
+Operations are held to a "known-good" standard, which means behavior is predictable and in line with S3 behavior.
