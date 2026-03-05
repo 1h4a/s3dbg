@@ -17,9 +17,7 @@ function route() {
         credentials: credentials,
         endpoint: endpoint,
         forcePathStyle: forcePathStyle,
-        maxAttempts: maxAttempts
+        maxAttempts: maxAttempts,
     };
     const client = new S3Client(config);
-
-
 }
