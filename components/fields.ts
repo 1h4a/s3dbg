@@ -29,7 +29,7 @@ type FieldType = "string" | "number" | "boolean" | "date";
  * @property {FieldType} type - Input type for rendering and validation
  * If optional fields are left empty, it is best practice to pass the field through `normaliseFieldValues` to ensure default values are applied.
  */
-type Field = {
+export type Field = {
     label: string,
     id: string,
     description?: string,
@@ -45,7 +45,7 @@ type Field = {
  * @property {string} title - Section heading
  * @property {Field[]} fields - Fields contained in this section
  */
-type Section = {
+export type Section = {
     title: string,
     fields: Field[]
 }
@@ -56,7 +56,7 @@ type Section = {
  * @property {Field[]} fields - Top-level fields (not in a section)
  * @property {Section[]} [sections] - Optional grouped sections
  */
-type ConfigSchema = {
+export type ConfigSchema = {
     title: string,
     fields: Field[],
     sections?: Section[]
