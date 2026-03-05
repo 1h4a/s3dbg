@@ -1,6 +1,7 @@
 import { Field, FieldGroup, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 import { clientConfig, senderConfig } from "@/components/fields";
 import type { ConfigSchema, Field as FieldSchema, Section } from "@/components/fields";
 
@@ -75,6 +76,10 @@ function ConfigSection({ schema }: { schema: ConfigSchema }) {
       {schema.sections?.map((section) => (
         <SectionRenderer key={section.title} section={section} />
       ))}
+        <span className="flex flex-row gap-4 pt-8 w-full items-end justify-end">
+            <Button className="active:opacity-50" variant="outline"> Apply Settings </Button>
+            <Button className="active:opacity-50" variant="outline"> Reset </Button>
+        </span>
     </div>
   );
 }
