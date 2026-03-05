@@ -18,7 +18,7 @@ _pnpm:_
 `pnpm i`
 `pnpm dev`
 
-While you can theoretically build and deploy the app, it's not intended to be used as such and as such, there is no support for deploying instances.
+While you can theoretically build and deploy the app, it's not intended to be used in such a manner, therefore, there is no support for deployed instances.
 
 Requests are sent via the GUI.
 
