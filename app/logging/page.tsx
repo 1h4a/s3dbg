@@ -1,5 +1,3 @@
 export default function Page() {
-    return (
-        <p> Logging Page </p>
-    )
+  return <p> Logging Page </p>;
 }
