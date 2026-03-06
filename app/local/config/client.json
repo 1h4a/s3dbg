@@ -1,0 +1,10 @@
+{
+  "id": "client_config",
+  "access_key": "",
+  "secret_key": "",
+  "session_token": "",
+  "region": "us-east-1",
+  "endpoint": "http://localhost:1519",
+  "force_path_style": false,
+  "max_attempts": 0
+}
