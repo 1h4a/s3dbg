@@ -102,7 +102,13 @@ function FieldRenderer({ field, value }: { field: FieldSchema; value?: any }) {
   );
 }
 
-function SectionRenderer({ section, values }: { section: Section; values?: Record<string, any> }) {
+function SectionRenderer({
+  section,
+  values,
+}: {
+  section: Section;
+  values?: Record<string, any>;
+}) {
   return (
     <Collapsible>
       <CollapsibleTrigger className="hover:underline hover:underline-offset-2 transition-all duration-500 pt-4">
@@ -111,7 +117,11 @@ function SectionRenderer({ section, values }: { section: Section; values?: Recor
       <CollapsibleContent>
         <FieldGroup className="grid max-w-full grid-cols-4 pt-4">
           {section.fields.map((field) => (
-            <FieldRenderer key={field.id} field={field} value={values?.[field.id]} />
+            <FieldRenderer
+              key={field.id}
+              field={field}
+              value={values?.[field.id]}
+            />
           ))}
         </FieldGroup>
       </CollapsibleContent>
@@ -169,11 +179,19 @@ function ConfigSection({
       <div className="w-full pb-4">{schema.title}</div>
       <FieldGroup className="grid max-w-full grid-cols-4">
         {schema.fields.map((field) => (
-          <FieldRenderer key={field.id} field={field} value={values?.[field.id]} />
+          <FieldRenderer
+            key={field.id}
+            field={field}
+            value={values?.[field.id]}
+          />
         ))}
       </FieldGroup>
       {schema.sections?.map((section) => (
-        <SectionRenderer key={section.title} section={section} values={values} />
+        <SectionRenderer
+          key={section.title}
+          section={section}
+          values={values}
+        />
       ))}
       <span className="flex flex-row gap-4 pt-8 w-full items-end justify-end">
         <Button
