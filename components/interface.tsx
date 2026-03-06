@@ -136,10 +136,11 @@ function ConfigSection({
 }: {
   schema: ConfigSchema;
   values?: Record<string, any>;
-  onReset?: () => void;
+  onReset?: () => Promise<void>;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const handleApply = async () => {
+  const [resetKey, setResetKey] = useState(0);
+    const handleApply = async () => {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       const data: Record<string, any> = {};
@@ -167,12 +168,14 @@ function ConfigSection({
       body: JSON.stringify({ id: schema.id }),
     });
     if (reset.ok && onReset) {
-      onReset();
+      await onReset();
+      setResetKey((k) => k + 1);
     }
   };
 
   return (
     <form
+      key={resetKey}
       ref={formRef}
       className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
     >
