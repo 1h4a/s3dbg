@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
-import type { ConfigSchema, Field } from "@/components/fields";
-import { parseValue } from "@/components/fields";
+import type { ConfigSchema, Field } from "@/lib/fields";
+import { parseValue } from "@/lib/fields";
 
 /*
 
@@ -125,7 +125,7 @@ export async function DELETE(request: NextRequest) {
     );
   }
 
-  const { clientConfig, senderConfig } = await import("@/components/fields");
+  const { clientConfig, senderConfig } = await import("@/lib/fields");
 
   try {
     switch (data.id) {
