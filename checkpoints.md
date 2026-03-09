@@ -10,7 +10,6 @@ Checkpoint 1:
 - [ ] DeleteObject
 - [ ] DeleteObjects
 - [ ] DeleteObjectTagging
-- [ ] PostObject
 - [ ] PutObject
 - [ ] PutObjectAcl
 - [ ] PutObjectTagging
