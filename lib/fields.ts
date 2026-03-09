@@ -98,7 +98,7 @@ function normaliseSectionValues(section: Section): Section {
 }
 
 /**
- * Applies normalisation to all fields and sections in a ConfigSchema.
+ * Applies normalisation to all fields and sections in a `ConfigSchema`.
  * @param {ConfigSchema} schema - Schema to normalise
  * @returns {ConfigSchema} - Normalised schema
  */
@@ -111,6 +111,15 @@ function normaliseConfigSchema(schema: ConfigSchema): ConfigSchema {
       fields: section.fields.map(normaliseFieldValues),
     })),
   };
+}
+
+/**
+ * Returns all fields in a `ConfigSchema`, stripping the rest of the structure.
+ * @param {ConfigSchema} schema - Schema to get fields from
+ */
+export function getConfigFields(schema: ConfigSchema): Field[] {
+    const sectionFields = schema.sections?.flatMap((section) => section.fields) ?? [];
+    return [...schema.fields, ...sectionFields];
 }
 
 /**
@@ -152,6 +161,25 @@ export function parseValue(
     default:
       throw new Error(`Unsupported field type: ${type}`);
   }
+}
+
+/**
+ * Returns a specific field as a Field object from its ID.
+ * The `availableFields` array is defined in `fields.ts`.
+ * Should not be used outside of this file - the `S3Request` class should provide a validated form
+ * of all the necessary information to make the request.
+ *
+ * @deprecated
+ * `availableFields` has been transitioned to a Record, meaning it can be directly indexed by ID.
+ *
+ * @param {string} id - Specifies field ID to search for.
+ */
+function fieldById(id: string): Field {
+    const out = availableFields[id]
+    if (!out) {
+        throw new Error("Invalid field passed to fieldById: " + id + "")
+    }
+    return out
 }
 
 // Schema
@@ -532,7 +560,19 @@ const senderConfigFields: ConfigSchema = {
 
 const loggingConfigFields = {};
 
-/** Formatted schemas */
+/* List of available fields */
+const _availableFields: Field[] = [...getConfigFields(clientConfigFields), ...getConfigFields(senderConfigFields)];
+/**
+ * A Record of all available fields, indexed by their ID.
+ * Record indexing now replaces the `getFieldById` function.
+ *
+ * `availableFields` should not be used outside of this file and `requests.ts`.
+ * Request sending functions should receive all necessary information from the `S3Request` class.
+ */
+export const availableFields: Record<string, Field> = Object.fromEntries(_availableFields.map((field) => [field.id, field]));
+
+/* Formatted schemas */
+
 export const clientConfig = normaliseConfigSchema(clientConfigFields);
 export const senderConfig = normaliseConfigSchema(senderConfigFields);
 // export const loggingConfig = normaliseConfigSchema(loggingConfigFields);
