@@ -75,7 +75,8 @@ export function RequestInterface({ className }: { className?: string }) {
                 </Select>
                 <FieldDescription> The request type to send. </FieldDescription>
             </Field>
-            <span className="flex flex-row gap-4 pt-8 w-full items-end justify-end">
+            <span className="flex flex-row gap-4 pt-4 w-full items-center justify-between">
+                <p className="text-sm text-neutral-400">The content of requests is pulled from the local configuration. Make sure to apply settings before sending a request.</p>
         <Button
             className="active:opacity-50"
             type="button"
@@ -140,7 +141,7 @@ export function ConfigInterface({ className }: { className?: string }) {
         className={`flex flex-row w-full h-fit items-center justify-center font-medium tracking-tight`}
       >
         <div className="w-fit h-full outline-1 outline-amber-400 text-amber-400 opacity-75 text-sm text-center p-4 m-4 rounded-sm">
-          Values that aren't filled are still parsed and default values are
+            ⚠ Values that aren't filled are still parsed and default values are
           applied. The default value for strings is "", numbers is 0 and
           booleans is false.
         </div>
