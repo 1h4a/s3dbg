@@ -13,16 +13,70 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { clientConfig, senderConfig, parseValue } from "@/components/fields";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+    SelectSeparator
+} from "@/components/ui/select";
+
+import { clientConfig, senderConfig, parseValue } from "@/lib/fields";
 import type {
   ConfigSchema,
   Field as FieldSchema,
   Section,
-} from "@/components/fields";
+} from "@/lib/fields";
+
+import { s3Requests } from "@/lib/requests";
 
 import { useRef, useState, useEffect } from "react";
 
 type ConfigValues = Record<string, Record<string, any>>;
+
+export function RequestInterface({ className }: { className?: string }) {
+    return (<div
+        className={
+            "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm " +
+            className
+        }
+    >
+        <div
+            className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
+            id="request_send"
+        >
+            <p className="pb-4"> Send Request </p>
+            <Field>
+                <FieldLabel>Request Type</FieldLabel>
+                <Select>
+                    <SelectTrigger className="w-full max-w-48">
+                        <SelectValue placeholder="Request Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {s3Requests.map((group, index) => (
+                            <div key={`con-${group.section}`}>
+                                {index > 0 && <SelectSeparator key={`sep-${group.section}`} />}
+                                <SelectGroup key={group.section}>
+                                    <SelectLabel>{group.section}</SelectLabel>
+                                    {group.requests.map((request) => (
+                                        <SelectItem key={request.id} value={request.id}>
+                                            {request.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </div>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <FieldDescription> The request type to send. </FieldDescription>
+            </Field>
+
+        </div>
+    </div>)
+}
 
 export function ConfigInterface({ className }: { className?: string }) {
   const [configValues, setConfigValues] = useState<ConfigValues>({});
