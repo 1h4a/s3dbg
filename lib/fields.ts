@@ -118,8 +118,9 @@ function normaliseConfigSchema(schema: ConfigSchema): ConfigSchema {
  * @param {ConfigSchema} schema - Schema to get fields from
  */
 export function getConfigFields(schema: ConfigSchema): Field[] {
-    const sectionFields = schema.sections?.flatMap((section) => section.fields) ?? [];
-    return [...schema.fields, ...sectionFields];
+  const sectionFields =
+    schema.sections?.flatMap((section) => section.fields) ?? [];
+  return [...schema.fields, ...sectionFields];
 }
 
 /**
@@ -175,11 +176,11 @@ export function parseValue(
  * @param {string} id - Specifies field ID to search for.
  */
 function fieldById(id: string): Field {
-    const out = availableFields[id]
-    if (!out) {
-        throw new Error("Invalid field passed to fieldById: " + id + "")
-    }
-    return out
+  const out = availableFields[id];
+  if (!out) {
+    throw new Error("Invalid field passed to fieldById: " + id + "");
+  }
+  return out;
 }
 
 // Schema
@@ -561,7 +562,10 @@ const senderConfigFields: ConfigSchema = {
 const loggingConfigFields = {};
 
 /* List of available fields */
-const _availableFields: Field[] = [...getConfigFields(clientConfigFields), ...getConfigFields(senderConfigFields)];
+const _availableFields: Field[] = [
+  ...getConfigFields(clientConfigFields),
+  ...getConfigFields(senderConfigFields),
+];
 /**
  * A Record of all available fields, indexed by their ID.
  * Record indexing now replaces the `getFieldById` function.
@@ -569,7 +573,9 @@ const _availableFields: Field[] = [...getConfigFields(clientConfigFields), ...ge
  * `availableFields` should not be used outside of this file and `requests.ts`.
  * Request sending functions should receive all necessary information from the `S3Request` class.
  */
-export const availableFields: Record<string, Field> = Object.fromEntries(_availableFields.map((field) => [field.id, field]));
+export const availableFields: Record<string, Field> = Object.fromEntries(
+  _availableFields.map((field) => [field.id, field]),
+);
 
 /* Formatted schemas */
 

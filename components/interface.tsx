@@ -14,22 +14,18 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-    SelectSeparator
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+  SelectSeparator,
 } from "@/components/ui/select";
 
 import { clientConfig, senderConfig, parseValue } from "@/lib/fields";
-import type {
-  ConfigSchema,
-  Field as FieldSchema,
-  Section,
-} from "@/lib/fields";
+import type { ConfigSchema, Field as FieldSchema, Section } from "@/lib/fields";
 
 import { s3Requests } from "@/lib/requests";
 
@@ -38,57 +34,64 @@ import { useRef, useState, useEffect } from "react";
 type ConfigValues = Record<string, Record<string, any>>;
 
 export function RequestInterface({ className }: { className?: string }) {
-    const handleSend = async () => {}
+  const handleSend = async () => {};
 
-    return (<div
-        className={
-            "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm " +
-            className
-        }
+  return (
+    <div
+      className={
+        "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm " +
+        className
+      }
     >
-        <div
-            className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
-            id="request_send"
-        >
-            <p className="pb-4"> Requests </p>
-            <Field>
-                <FieldLabel>Request Type</FieldLabel>
-                <Select>
-                    <SelectTrigger className="w-full max-w-48">
-                        <SelectValue placeholder="Request Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {s3Requests.map((group, index) => (
-                            <div key={`con-${group.section}`}>
-                                {index > 0 && <SelectSeparator key={`sep-${group.section}`} />}
-                                <SelectGroup key={group.section}>
-                                    <SelectLabel>{group.section}</SelectLabel>
-                                    {group.requests.map((request) => (
-                                        <SelectItem key={request.id} value={request.id}>
-                                            {request.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            </div>
-                        ))}
-                    </SelectContent>
-                </Select>
-                <FieldDescription> The request type to send. </FieldDescription>
-            </Field>
-            <span className="flex flex-row gap-4 pt-4 w-full items-center justify-between">
-                <p className="text-sm text-neutral-400">The content of requests is pulled from the local configuration. Make sure to apply settings before sending a request.</p>
-        <Button
+      <div
+        className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
+        id="request_send"
+      >
+        <p className="pb-4"> Requests </p>
+        <Field>
+          <FieldLabel>Request Type</FieldLabel>
+          <Select>
+            <SelectTrigger className="w-full max-w-48">
+              <SelectValue placeholder="Request Type" />
+            </SelectTrigger>
+            <SelectContent>
+              {s3Requests.map((group, index) => (
+                <div key={`con-${group.section}`}>
+                  {index > 0 && (
+                    <SelectSeparator key={`sep-${group.section}`} />
+                  )}
+                  <SelectGroup key={group.section}>
+                    <SelectLabel>{group.section}</SelectLabel>
+                    {group.requests.map((request) => (
+                      <SelectItem key={request.id} value={request.id}>
+                        {request.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </div>
+              ))}
+            </SelectContent>
+          </Select>
+          <FieldDescription> The request type to send. </FieldDescription>
+        </Field>
+        <span className="flex flex-row gap-4 pt-4 w-full items-center justify-between">
+          <p className="text-sm text-neutral-400">
+            The content of requests is pulled from the local configuration. Make
+            sure to apply settings before sending a request.
+          </p>
+          <Button
             className="active:opacity-50"
             type="button"
             variant="outline"
             onClick={handleSend}
-        >
-          {" "}
+          >
+            {" "}
             Send Request{" "}
-        </Button>
-      </span>
-        </div>
-    </div>)
+          </Button>
+        </span>
+      </div>
+    </div>
+  );
 }
 
 export function ConfigInterface({ className }: { className?: string }) {
@@ -141,7 +144,7 @@ export function ConfigInterface({ className }: { className?: string }) {
         className={`flex flex-row w-full h-fit items-center justify-center font-medium tracking-tight`}
       >
         <div className="w-fit h-full outline-1 outline-amber-400 text-amber-400 opacity-75 text-sm text-center p-4 m-4 rounded-sm">
-            ⚠ Values that aren't filled are still parsed and default values are
+          ⚠ Values that aren't filled are still parsed and default values are
           applied. The default value for strings is "", numbers is 0 and
           booleans is false.
         </div>
@@ -207,7 +210,7 @@ function ConfigSection({
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [resetKey, setResetKey] = useState(0);
-    const handleApply = async () => {
+  const handleApply = async () => {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       const data: Record<string, any> = {};
