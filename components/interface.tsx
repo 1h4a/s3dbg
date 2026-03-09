@@ -38,6 +38,8 @@ import { useRef, useState, useEffect } from "react";
 type ConfigValues = Record<string, Record<string, any>>;
 
 export function RequestInterface({ className }: { className?: string }) {
+    const handleSend = async () => {}
+
     return (<div
         className={
             "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm " +
@@ -48,7 +50,7 @@ export function RequestInterface({ className }: { className?: string }) {
             className="flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm"
             id="request_send"
         >
-            <p className="pb-4"> Send Request </p>
+            <p className="pb-4"> Requests </p>
             <Field>
                 <FieldLabel>Request Type</FieldLabel>
                 <Select>
@@ -73,7 +75,17 @@ export function RequestInterface({ className }: { className?: string }) {
                 </Select>
                 <FieldDescription> The request type to send. </FieldDescription>
             </Field>
-
+            <span className="flex flex-row gap-4 pt-8 w-full items-end justify-end">
+        <Button
+            className="active:opacity-50"
+            type="button"
+            variant="outline"
+            onClick={handleSend}
+        >
+          {" "}
+            Send Request{" "}
+        </Button>
+      </span>
         </div>
     </div>)
 }
