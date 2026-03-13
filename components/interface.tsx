@@ -34,24 +34,24 @@ import { useRef, useState, useEffect } from "react";
 type ConfigValues = Record<string, Record<string, any>>;
 
 export function RequestInterface({ className }: { className?: string }) {
-    const [errors, setErrors] = useState<string[]>([]);
-    const [selectedRequest, setSelectedRequest] = useState<string | undefined>();
-    const clearErrors = () => {
-        setErrors([]);
-    }
+  const [errors, setErrors] = useState<string[]>([]);
+  const [selectedRequest, setSelectedRequest] = useState<string | undefined>();
+  const clearErrors = () => {
+    setErrors([]);
+  };
 
-    const handleSend = async () => {
-        const submit = await fetch("/s3dbg/send", {
-            method: "POST",
-            body: JSON.stringify({ requestType: selectedRequest?.toString() }),
-        });
-        if (submit.ok) {
-            setErrors([]);
-        } else {
-            const error = await submit.json().then((data) => data.error);
-            setErrors((prevErrors) => [...prevErrors, error]);
-        }
-    };
+  const handleSend = async () => {
+    const submit = await fetch("/s3dbg/send", {
+      method: "POST",
+      body: JSON.stringify({ requestType: selectedRequest?.toString() }),
+    });
+    if (submit.ok) {
+      setErrors([]);
+    } else {
+      const error = await submit.json().then((data) => data.error);
+      setErrors((prevErrors) => [...prevErrors, error]);
+    }
+  };
 
   return (
     <div
@@ -65,47 +65,57 @@ export function RequestInterface({ className }: { className?: string }) {
         id="request_send"
       >
         <p className="pb-4"> Requests </p>
-          <span className="grid grid-cols-2 gap-4 w-full">
-              <Field>
-          <FieldLabel>Request Type</FieldLabel>
-          <Select value={selectedRequest} onValueChange={setSelectedRequest}>
-            <SelectTrigger className="w-full max-w-48">
-              <SelectValue placeholder="Request Type" />
-            </SelectTrigger>
-            <SelectContent>
-              {s3Requests.map((group, index) => (
-                  <div key={`con-${group.section}`}>
-                      {index > 0 && (
-                          <SelectSeparator key={`sep-${group.section}`} />
-                      )}
-                      <SelectGroup key={group.section}>
-                          <SelectLabel>{group.section}</SelectLabel>
-                          {group.requests.map((request) => (
-                              <SelectItem key={request.id} value={request.id}>
-                                  {request.label}
-                              </SelectItem>
-                          ))}
-                      </SelectGroup>
-                  </div>
-              ))}
-            </SelectContent>
-          </Select>
-          <FieldDescription> The request type to send. </FieldDescription>
-        </Field>
+        <span className="grid grid-cols-2 gap-4 w-full">
           <Field>
-              <FieldLabel className="flex flex-row justify-between items-center">
-                  Errors
-                  <Button className="active:opacity-50" variant="ghost" onClick={clearErrors}> Clear Errors </Button>
-              </FieldLabel>
-              <div className="w-full h-full max-h-48 min-h-48 flex flex-col items-start justify-start gap-4 p-4 outline-neutral-700 outline-1 rounded-sm overflow-y-scroll">
-                  {errors.map((error, index) => (
-                      <div key={`error-${index}`} className="w-full h-full flex flex-row items-center justify-between text-red-400 text-sm">
-                          {`Error ${index + 1}: ${error}`}
-                      </div>
-                  ))}
-              </div>
+            <FieldLabel>Request Type</FieldLabel>
+            <Select value={selectedRequest} onValueChange={setSelectedRequest}>
+              <SelectTrigger className="w-full max-w-48">
+                <SelectValue placeholder="Request Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {s3Requests.map((group, index) => (
+                  <div key={`con-${group.section}`}>
+                    {index > 0 && (
+                      <SelectSeparator key={`sep-${group.section}`} />
+                    )}
+                    <SelectGroup key={group.section}>
+                      <SelectLabel>{group.section}</SelectLabel>
+                      {group.requests.map((request) => (
+                        <SelectItem key={request.id} value={request.id}>
+                          {request.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </div>
+                ))}
+              </SelectContent>
+            </Select>
+            <FieldDescription> The request type to send. </FieldDescription>
           </Field>
-          </span>
+          <Field>
+            <FieldLabel className="flex flex-row justify-between items-center">
+              Errors
+              <Button
+                className="active:opacity-50"
+                variant="ghost"
+                onClick={clearErrors}
+              >
+                {" "}
+                Clear Errors{" "}
+              </Button>
+            </FieldLabel>
+            <div className="w-full h-full max-h-48 min-h-48 flex flex-col items-start justify-start gap-4 p-4 outline-neutral-700 outline-1 rounded-sm overflow-y-scroll">
+              {errors.map((error, index) => (
+                <div
+                  key={`error-${index}`}
+                  className="w-full h-full flex flex-row items-center justify-between text-red-400 text-sm"
+                >
+                  {`Error ${index + 1}: ${error}`}
+                </div>
+              ))}
+            </div>
+          </Field>
+        </span>
         <span className="flex flex-row gap-4 pt-4 w-full items-center justify-between">
           <p className="text-sm text-neutral-400">
             The content of requests is pulled from the local configuration. Make

@@ -41,27 +41,30 @@ export function findRequestById(id: string): InternalS3Request | undefined {
     .find((req) => req.id === id);
 }
 
-export function validateRequest(id: string): { isValid: boolean; error: string } {
-    let error: string = "";
-    const out = findRequestById(id) !== undefined;
-    if (!out) {
-        error = "Invalid request ID: " + id;
-    }
-    return { isValid: out, error: error };
+export function validateRequest(id: string): {
+  isValid: boolean;
+  error: string;
+} {
+  let error: string = "";
+  const out = findRequestById(id) !== undefined;
+  if (!out) {
+    error = "Invalid request ID: " + id;
+  }
+  return { isValid: out, error: error };
 }
 
 export function constructRequest(id: string, config: CommandConfig): S3Request {
-    const req = findRequestById(id);
-    if (!req) {
-        throw new Error("Invalid request ID: " + id);
-    }
+  const req = findRequestById(id);
+  if (!req) {
+    throw new Error("Invalid request ID: " + id);
+  }
 
-    const out: S3Request = new S3Request();
-    out.id = req.id;
-    out.label = req.label;
-    out.config = config;
+  const out: S3Request = new S3Request();
+  out.id = req.id;
+  out.label = req.label;
+  out.config = config;
 
-    return out;
+  return out;
 }
 
 /**
