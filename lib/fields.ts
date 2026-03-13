@@ -18,6 +18,12 @@ All input fields should be defined using these types.
 type FieldType = "string" | "number" | "boolean" | "date";
 
 /**
+ * Represents the types of schema used within the system.
+ * This type is used to provide a single reference source of truth for all schemas.
+ */
+export type SchemaType = "client" | "sender" | "logging";
+
+/**
  * Represents a single configurable form field.
  * @property {string} label - Display label shown to the user
  * @property {string} id - Unique identifier used for form state
@@ -90,11 +96,10 @@ function normaliseFieldValues(field: Field): Field {
  * @returns {Section} - Section with defaults applied
  */
 function normaliseSectionValues(section: Section): Section {
-  const nsection: Section = {
+  return {
     ...section,
     title: section.title + " *",
   };
-  return nsection;
 }
 
 /**
@@ -132,7 +137,7 @@ export function parseValue(
   value: string | undefined,
   type: FieldType,
 ): string | number | boolean | Date {
-  const dval = value ?? "";
+  const dval: string = value ?? "";
   switch (type) {
     case "string":
       return dval;
@@ -146,7 +151,7 @@ export function parseValue(
         return nval;
       }
     case "boolean":
-      const bval = dval.toLowerCase();
+      const bval: string = dval.toLowerCase();
       if (bval === "true" || bval === "false") {
         return bval === "true";
       } else if (bval === "") {

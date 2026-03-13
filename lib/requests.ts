@@ -1,6 +1,8 @@
 import type { Field } from "@/lib/fields";
 import { availableFields } from "@/lib/fields";
 
+// Types
+
 /**
  * Internal representation of a S3Request.
  * This is used internally to validate requests.
@@ -22,7 +24,44 @@ export type CommandConfig = Record<string, string | number | boolean | Date>;
 export class S3Request {
   label: string = "";
   id: string = "";
-  config: CommandConfig = {};
+  config: CommandConfig = { bucket: "" };
+}
+
+// Functions
+
+/**
+ * Finds a request definition by its ID.
+ *
+ * @param {string} id - Request ID to look up.
+ * @returns {InternalS3Request | undefined} Matching request definition, if found.
+ */
+export function findRequestById(id: string): InternalS3Request | undefined {
+  return s3Requests
+    .flatMap((section) => section.requests)
+    .find((req) => req.id === id);
+}
+
+export function validateRequest(id: string): { isValid: boolean; error: string } {
+    let error: string = "";
+    const out = findRequestById(id) !== undefined;
+    if (!out) {
+        error = "Invalid request ID: " + id;
+    }
+    return { isValid: out, error: error };
+}
+
+export function constructRequest(id: string, config: CommandConfig): S3Request {
+    const req = findRequestById(id);
+    if (!req) {
+        throw new Error("Invalid request ID: " + id);
+    }
+
+    const out: S3Request = new S3Request();
+    out.id = req.id;
+    out.label = req.label;
+    out.config = config;
+
+    return out;
 }
 
 /**
