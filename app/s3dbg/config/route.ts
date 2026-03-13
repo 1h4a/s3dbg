@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
+import { constants as fsConstants } from "node:fs";
 import type { ConfigSchema, Field } from "@/lib/fields";
 import { parseValue } from "@/lib/fields";
 
@@ -41,6 +42,19 @@ function getDefaultsFromSchema(
   }
 
   return defaults;
+}
+
+async function ensureConfigFile(
+  id: string,
+  filePath: string,
+  getDefaults: () => Promise<Record<string, string | number | boolean | Date>>,
+) {
+  try {
+    await fs.access(filePath, fsConstants.F_OK);
+  } catch {
+    const defaults = await getDefaults();
+    await fs.writeFile(filePath, JSON.stringify(defaults, null, 2));
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -94,10 +108,28 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    const { clientConfig, senderConfig } = await import("@/lib/fields");
+
+    const clientPath = process.cwd() + "/app/local/config/client.json";
+    const senderPath = process.cwd() + "/app/local/config/sender.json";
+    const loggingPath = process.cwd() + "/app/local/config/logging.json";
+
+    await Promise.all([
+      ensureConfigFile("client_config", clientPath, async () =>
+        getDefaultsFromSchema(clientConfig),
+      ),
+      ensureConfigFile("sender_config", senderPath, async () =>
+        getDefaultsFromSchema(senderConfig),
+      ),
+      ensureConfigFile("logging_config", loggingPath, async () => ({
+        id: "logging_config",
+      })),
+    ]);
+
     const [clientData, senderData, loggingData] = await Promise.all([
-      fs.readFile(process.cwd() + "/app/local/config/client.json", "utf-8"),
-      fs.readFile(process.cwd() + "/app/local/config/sender.json", "utf-8"),
-      fs.readFile(process.cwd() + "/app/local/config/logging.json", "utf-8"),
+      fs.readFile(clientPath, "utf-8"),
+      fs.readFile(senderPath, "utf-8"),
+      fs.readFile(loggingPath, "utf-8"),
     ]);
 
     const configs = [
