@@ -26,13 +26,15 @@ Requests are sent via the GUI.
 
 All operations are individual local endpoints.
 
-The server sends requests to itself, to the endpoint at:
+When attempting to send S3 requests to the server itself for logging, they should be sent to the endpoint at:
 
 `/s3dbg/s3`
 
 The user client sends requests to:
 
 `/s3dbg/send`
+
+(Data is validated, formatted and passed into an S3 command, which is then sent from the server)
 
 Config requests are sent to:
 
