@@ -44,3 +44,4 @@ next-env.d.ts
 client.json
 sender.json
 logging.json
+/app/local/logs/index.json

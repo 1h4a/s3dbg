@@ -1,5 +1,7 @@
 export default function Layout({ children }: { children: React.ReactNode }) {
-  {
-    children;
-  }
+  return (
+      <span>
+          {children}
+      </span>
+  )
 }

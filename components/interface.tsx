@@ -24,6 +24,8 @@ import {
   SelectSeparator,
 } from "@/components/ui/select";
 
+import type { Entry, IndexedLog } from "@/lib/logging";
+
 import { clientConfig, senderConfig, parseValue } from "@/lib/fields";
 import type { ConfigSchema, Field as FieldSchema, Section } from "@/lib/fields";
 
@@ -32,6 +34,94 @@ import { s3Requests } from "@/lib/requests";
 import { useRef, useState, useEffect } from "react";
 
 type ConfigValues = Record<string, Record<string, any>>;
+
+export function LoggingInterface({ className }: { className?: string }) {
+    const [logs, setLogs] = useState<IndexedLog>({});
+
+    const normaliseLogs = (data: unknown): IndexedLog => {
+        if (Array.isArray(data)) {
+            const values: IndexedLog = {};
+            for (const entry of data) {
+                if (entry && typeof entry === "object" && "id" in entry) {
+                    const typedEntry = entry as Entry;
+                    values[typedEntry.id] = typedEntry;
+                }
+            }
+            return values;
+        }
+
+        if (data && typeof data === "object") {
+            return data as IndexedLog;
+        }
+
+        return {};
+    };
+
+    const fetchLogs = async () => {
+        try {
+            const response = await fetch("/s3dbg/log");
+            const data = await response.json();
+            setLogs(normaliseLogs(data));
+        } catch (error) {
+            console.error("Failed to fetch logs:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchLogs();
+    }, []);
+
+    const clearLogs = async () => {
+        try {
+            const response = await fetch(new Request("/s3dbg/log", { method: "DELETE" }))
+            if (response.ok) {
+                setLogs({});
+            }
+        }
+        catch (error) {
+            console.error("Failed to clear logs:", error);
+        }
+    }
+
+    return (
+        <div
+            className={
+                "w-full h-full flex flex-col items-start justify-start gap-4 p-4 outline-1 outline-neutral-800 rounded-sm font-mono " +
+                className
+            }
+        >
+            <span className="flex flex-row gap-4 w-full items-center justify-between">
+                <p className="pb-4"> Logs </p>
+                <Button
+                    className="active:opacity-50"
+                    variant="ghost"
+                    onClick={clearLogs}
+                >
+                    {" "}
+                    Clear Logs{" "}
+                </Button>
+            </span>
+            {
+                Object.entries(logs).map(([id, log]) => (
+                    <LogEntry key={id} entry={log} />
+                ))
+            }
+        </div>
+    )
+}
+
+export function LogEntry({ className, entry }: { className?: string, entry: Entry }) {
+    return (
+        <div className={
+            "flex flex-col p-4 items-start justify-start w-full h-full outline-neutral-700 outline-1 rounded-sm " +
+            (className ?? "")
+        }>
+            <p> Entry ID: <span className="text-neutral-400">{entry.id}</span> </p>
+            <p> Entry Type: <span className="text-neutral-400">{ entry.type }</span> </p>
+            <p> Contents: <span className="text-neutral-400">{ entry.contents }</span> </p>
+        </div>
+    )
+}
 
 export function RequestInterface({ className }: { className?: string }) {
   const [errors, setErrors] = useState<string[]>([]);
